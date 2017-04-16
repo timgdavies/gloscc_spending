@@ -1,7 +1,7 @@
 # This is a template for a Python scraper on morph.io (https://morph.io)
 # including some code snippets below that you should find helpful
 
-#import ScraperWiki
+import ScraperWiki
 from bs4 import BeautifulSoup
 from contextlib import closing
 import requests
