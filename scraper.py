@@ -1,32 +1,32 @@
 # This is a template for a Python scraper on morph.io (https://morph.io)
 # including some code snippets below that you should find helpful
 
-import ScraperWiki
+import scraperwiki
 from bs4 import BeautifulSoup
 from contextlib import closing
 import requests
 import csv
 #
 # # Read in a page
-html = ScraperWiki.scrape("http://foo.com")
+html = scraperwiki.scrape("http://foo.com")
 #
 # # Find something on the page using css selectors
 # root = lxml.html.fromstring(html)
 # root.cssselect("div[align='left']")
 #
-# # Write out to the sqlite database using ScraperWiki library
-# ScraperWiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
+# # Write out to the sqlite database using scraperwiki library
+# scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
 #
 # # An arbitrary query against the database
-# ScraperWiki.sql.select("* from data where 'name'='peter'")
+# scraperwiki.sql.select("* from data where 'name'='peter'")
 
-# You don't have to do things with the ScraperWiki and lxml libraries.
+# You don't have to do things with the scraperwiki and lxml libraries.
 # You can use whatever libraries you want: https://morph.io/documentation/python
 # All that matters is that your final data is written to an SQLite database
 # called "data.sqlite" in the current working directory which has at least a table
 # called "data".
 
-html = ScraperWiki.scrape("http://www.gloucestershire.gov.uk/council-and-democracy/performance-and-spending/spend-over-500/")
+html = scraperwiki.scrape("http://www.gloucestershire.gov.uk/council-and-democracy/performance-and-spending/spend-over-500/")
 
 soup = BeautifulSoup(html, 'html.parser')
 
@@ -34,7 +34,7 @@ for a in soup.find_all('a'):
     if '.csv' in a.get('href'):
         url = "http://www.gloucestershire.gov.uk" + a.get('href')
         print("Fetching "+ url)
-        # csvdata = ScraperWiki.scrape("http://www.gloucestershire.gov.uk/" + a.get('href'))
+        # csvdata = scraperwiki.scrape("http://www.gloucestershire.gov.uk/" + a.get('href'))
         
         with closing(requests.get(url, stream=True)) as r:
             f = (line.decode('utf-8') for line in r.iter_lines())
@@ -45,4 +45,4 @@ for a in soup.find_all('a'):
                     del(row[''])
                 except Exception:
                     pass
-                ScraperWiki.sqlite.save(unique_keys=['hash'],data=row,table_name='data')
+                scraperwiki.sqlite.save(unique_keys=['hash'],data=row,table_name='data')
