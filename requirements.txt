@@ -4,6 +4,6 @@ Mako==1.0.6
 MarkupSafe==1.0
 python-editor==1.0.3
 requests==2.13.0
-+-e git+http://github.com/openaustralia/scraperwiki-python.git@morph_defaults#egg=scraperwiki
+-e git+http://github.com/openaustralia/scraperwiki-python.git@morph_defaults#egg=scraperwiki
 six==1.10.0
 SQLAlchemy==1.1.9
