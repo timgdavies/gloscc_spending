@@ -45,4 +45,4 @@ for a in soup.find_all('a'):
                     del(row[''])
                 except Exception:
                     pass
-                scraperwiki.sqlite.save(unique_keys=['hash'],data=row,tablename='data')
+                scraperwiki.sqlite.save(unique_keys=['hash'],data=row,table_name='data')
