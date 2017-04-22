@@ -34,19 +34,20 @@ for a in soup.find_all('a'):
     if '.csv' in a.get('href'):
         url = "http://www.gloucestershire.gov.uk" + a.get('href')
         print("Fetching "+ url)
-        # csvdata = scraperwiki.scrape("http://www.gloucestershire.gov.uk/" + a.get('href'))
-        
-        with closing(requests.get(url, stream=True)) as r:
-            f = (line.decode('utf-8') for line in r.iter_lines())
-            reader = csv.DictReader(f, delimiter=',', quotechar='"')
-            for row in reader:
-                row['hash'] = hash(frozenset(row.items()))
-                try: 
-                    del(row[''])
-                except Exception:
-                    pass
-                try:
-                    scraperwiki.sqlite.save(unique_keys=['hash'],data=row,table_name='data')
-                except Exception:
-                    print("Failed to save row")
+        try:
+            with closing(requests.get(url, stream=True)) as r:
+                f = (line.decode('utf-8') for line in r.iter_lines())
+                reader = csv.DictReader(f, delimiter=',', quotechar='"')
+                for row in reader:
+                    row['hash'] = hash(frozenset(row.items()))
+                    try: 
+                        del(row[''])
+                    except Exception:
+                        pass
+                    try:
+                        scraperwiki.sqlite.save(unique_keys=['hash'],data=row,table_name='data')
+                    except Exception:
+                        print("Failed to save row")
+        except Exception:
+            print "Failed to convert "+ url
 
