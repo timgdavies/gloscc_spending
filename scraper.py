@@ -35,9 +35,10 @@ for a in soup.find_all('a'):
         url = "http://www.gloucestershire.gov.uk" + a.get('href')
         # url = "http://localhost:8090/" + a.get('href').split("/")[3] # For local debugging
         print("Fetching "+ url)
-        try:
+        utry:
             with closing(requests.get(url, stream=True)) as r:
-                f = (line.decode('utf-8') for line in r.iter_lines())
+                f = (line.decode('cp1252').encode('utf8')
+                     for line in r.iter_lines())
                 header_reader = csv.reader(f)
                 headers = next(header_reader)
                 if(headers[0] != 'Service Area'): # Handle the case when the header row is missing - making a best guess
@@ -47,6 +48,8 @@ for a in soup.find_all('a'):
                 reader = csv.DictReader(f, delimiter=',', quotechar='"',fieldnames=headers)
                 for row in reader:
                     row['transaction_ref'] = row['transaction_no'] + " - " + row["expense_code"] ## We get duplicate transaction numbers, but seem to get unique with transaction_no + expense_code
+                    for k in row:
+                        row[k] = unicode(row[k].decode('cp1252'))
                     try: # remove any blanks
                         del(row[''])
                     except Exception:
